@@ -203,11 +203,10 @@
 </script>
   
 <script>
-  // Función para agregar un producto al carrito
   function addToCart(product) {
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.push(product); // Agregar el producto al carrito
-      localStorage.setItem('cart', JSON.stringify(cart)); // Guardar el carrito actualizado
+      cart.push(product); 
+      localStorage.setItem('cart', JSON.stringify(cart)); 
       alert(`${product.name} ha sido añadido al carrito`);
   }
 
