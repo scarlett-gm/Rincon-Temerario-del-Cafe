@@ -1,136 +1,134 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito - Coffee Shop</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="padding: 5px 0;">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="static/imagenes/logosinfondo.png" alt="RTC" class="my-2" style="max-width: 150px; height: auto;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="index.html" style="color: black; font-size: 18px;">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="about.html" style="color: black; font-size: 18px;">Nosotros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Coffeeshop.html" style="color: black; font-size: 18px;">Coffee Shop</a></li>
-                    <li class="nav-item"><a class="nav-link" href="carrito.html" style="color: black; font-size: 18px;">Carrito</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Carrito Section -->
-    <div class="container my-5">
-        <h2>Tu Carrito</h2>
-        <p>Aquí están los productos que has añadido.</p>
+{% extends "index.html" %}
 
-        <!-- Tabla del Carrito -->
-        <div class="table-responsive">
-            <table class="table" id="cartTable">
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Total</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="cartItems">
-                    <!-- Los productos del carrito se agregarán aquí dinámicamente -->
-                </tbody>
-            </table>
-        </div>
+{% block title %}
+    Carrito
+{% endblock %}
 
-        <!-- Total -->
-        <div class="d-flex justify-content-between align-items-center">
-            <h3 id="totalPrice">Total: $0.00</h3>
-            <button class="btn btn-primary">Finalizar Compra</button>
+{% block main %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="padding: 5px 0;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="/static/logosinfondo.png" alt="RTC" class="my-2" style="max-width: 150px; height: auto;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link active" href="{{ url_for('index') }}" style="color: black; font-size: 18px;">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about" style="color: black; font-size: 18px;">Nosotros</a></li>
+            <li class="nav-item"><a class="nav-link" href="/Coffeeshop" style="color: black; font-size: 18px;">Coffee Shop</a></li>
+            <li class="nav-item"><a class="nav-link" href="/carrito" style="color: black; font-size: 18px;">Carrito</a></li>
+            </ul>
         </div>
     </div>
+</nav>
 
-    <script>
-        // Cargar productos desde localStorage
-        window.onload = function() {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            let cartTable = document.getElementById('cartItems');
-            let totalPrice = 0;
+<!-- Carrito Section -->
+<div class="container my-5">
+    <h2>Tu Carrito</h2>
+    <p>Aquí están los productos que has añadido.</p>
 
-            // Limpiar la tabla antes de agregar productos
-            cartTable.innerHTML = '';
+    <!-- Tabla del Carrito -->
+    <div class="table-responsive">
+        <table class="table" id="cartTable">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="cartItems">
+                <!-- Los productos del carrito se agregarán aquí dinámicamente -->
+            </tbody>
+        </table>
+    </div>
 
-            cart.forEach(product => {
-                // Crear una fila por cada producto
-                const row = document.createElement('tr');
+    <!-- Total -->
+    <div class="d-flex justify-content-between align-items-center">
+        <h3 id="totalPrice">Total: $0.00</h3>
+        <button class="btn btn-primary">Finalizar Compra</button>
+    </div>
+</div>
 
-                row.innerHTML = `
-                    <td>${product.name}</td>
-                    <td>
-                        <input type="number" class="form-control" value="1" min="1" data-product="${product.name}">
-                    </td>
-                    <td>${product.price}</td>
-                    <td class="product-total">${product.price}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm remove-product" data-product="${product.name}">Eliminar</button>
-                    </td>
-                `;
+<script>
+    // Cargar productos desde localStorage
+    window.onload = function() {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let cartTable = document.getElementById('cartItems');
+        let totalPrice = 0;
 
-                cartTable.appendChild(row);
-                totalPrice += product.price;
+        // Limpiar la tabla antes de agregar productos
+        cartTable.innerHTML = '';
+
+        cart.forEach(product => {
+            // Crear una fila por cada producto
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${product.name}</td>
+                <td>
+                    <input type="number" class="form-control" value="1" min="1" data-product="${product.name}">
+                </td>
+                <td>${product.price}</td>
+                <td class="product-total">${product.price}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm remove-product" data-product="${product.name}">Eliminar</button>
+                </td>
+            `;
+
+            cartTable.appendChild(row);
+            totalPrice += product.price;
+        });
+
+        // Mostrar el total
+        document.getElementById('totalPrice').innerText = `Total: $${totalPrice.toFixed(2)}`;
+
+        // Manejo de eliminación de productos
+        document.querySelectorAll('.remove-product').forEach(button => {
+            button.addEventListener('click', function() {
+                const productName = button.getAttribute('data-product');
+                removeProductFromCart(productName);
             });
+        });
 
-            // Mostrar el total
-            document.getElementById('totalPrice').innerText = `Total: $${totalPrice.toFixed(2)}`;
-
-            // Manejo de eliminación de productos
-            document.querySelectorAll('.remove-product').forEach(button => {
-                button.addEventListener('click', function() {
-                    const productName = button.getAttribute('data-product');
-                    removeProductFromCart(productName);
-                });
+        // Manejo de cambio de cantidad
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('change', function() {
+                updateProductQuantity(input);
             });
+        });
+    };
 
-            // Manejo de cambio de cantidad
-            document.querySelectorAll('input[type="number"]').forEach(input => {
-                input.addEventListener('change', function() {
-                    updateProductQuantity(input);
-                });
-            });
-        };
+    // Eliminar producto del carrito
+    function removeProductFromCart(productName) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart = cart.filter(product => product.name !== productName);  // Filtra el carrito para eliminar el producto
+        localStorage.setItem('cart', JSON.stringify(cart));  // Guarda el carrito actualizado
+        location.reload(); // Recargar la página para actualizar el carrito
+    }
 
-        // Eliminar producto del carrito
-        function removeProductFromCart(productName) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart = cart.filter(product => product.name !== productName);  // Filtra el carrito para eliminar el producto
-            localStorage.setItem('cart', JSON.stringify(cart));  // Guarda el carrito actualizado
-            location.reload(); // Recargar la página para actualizar el carrito
+    // Actualizar cantidad del producto
+    function updateProductQuantity(input) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const productName = input.getAttribute('data-product');
+        const newQuantity = parseInt(input.value, 10);
+        const product = cart.find(p => p.name === productName);
+        if (product) {
+            const productTotal = product.price * newQuantity;
+            input.closest('tr').querySelector('.product-total').innerText = productTotal.toFixed(2);
+            product.quantity = newQuantity; // Actualizar cantidad
+            localStorage.setItem('cart', JSON.stringify(cart));
         }
+    }
+</script>
 
-        // Actualizar cantidad del producto
-        function updateProductQuantity(input) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const productName = input.getAttribute('data-product');
-            const newQuantity = parseInt(input.value, 10);
-            const product = cart.find(p => p.name === productName);
-            if (product) {
-                const productTotal = product.price * newQuantity;
-                input.closest('tr').querySelector('.product-total').innerText = productTotal.toFixed(2);
-                product.quantity = newQuantity; // Actualizar cantidad
-                localStorage.setItem('cart', JSON.stringify(cart));
-            }
-        }
-    </script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+{% endblock %}
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
-</body>
-</html>
+
