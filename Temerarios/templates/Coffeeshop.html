@@ -1,0 +1,230 @@
+{% extends "index.html" %}
+
+{% block title %}
+    Coffee Shop
+{% endblock %}
+
+{% block main %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="padding: 5px 0;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="/static/logosinfondo.png" alt="RTC" class="my-2" style="max-width: 150px; height: auto;">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link active" href="{{ url_for('index') }}" style="color: black; font-size: 18px;">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about" style="color: black; font-size: 18px;">Nosotros</a></li>
+            <li class="nav-item"><a class="nav-link" href="/Coffeeshop" style="color: black; font-size: 18px;">Coffee Shop</a></li>
+            <li class="nav-item"><a class="nav-link" href="/carrito" style="color: black; font-size: 18px;">Carrito</a></li>
+        </ul>
+      </div>
+    </div>
+</nav>
+
+<div class="container my-5">
+    <h2>Coffee Shop</h2>
+    <p>Mostrando productos por categoría</p>
+    <div class="d-flex justify-content-end mb-3">
+        <select class="form-select" aria-label="Categoría">
+            <option selected>Categoría</option>
+            <option value="1">Accesorios</option>
+            <option value="2">Café</option>
+            <option value="3">Postres</option>
+        </select>
+    </div>
+
+    
+
+    <!-- Accesorios: Tazas -->
+    <h3>Accesorios - Tazas</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/Taza3.png" alt="Taza con Cuchara" class="product-image">
+                <div class="product-name">Taza con Cuchara</div>
+                <div class="product-price">$10.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Taza con Cuchara" data-price="10.99" data-image="imagenes/Taza3.png">Add to carrito</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/Taza4.png" alt="Taza Negra" class="product-image">
+                <div class="product-name">Taza Negra</div>
+                <div class="product-price">$12.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Taza Negra" data-price="12.99" data-image="imagenes/Taza4.png">Add to carrito</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/Taza1.png" alt="Taza Blanca" class="product-image">
+                <div class="product-name">Taza Blanca</div>
+                <div class="product-price">$14.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Taza Blanca" data-price="14.99" data-image="imagenes/Taza1.png">Add to carrito</button>
+
+            </div>
+        </div>
+    </div>
+
+    <h3>Accesorios - Termos</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/Termo3.png" alt="Termo Clasico" class="product-image">
+                <div class="product-name">Termo Clasico</div>
+                <div class="product-price">$10.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Termo Clasico" data-price="10.99" data-image="imagenes/Termo3.png">Add to carrito</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/Termo5.png" alt="Termo Tipo Stanley" class="product-image">
+                <div class="product-name">Termo Tipo Stanley</div>
+                <div class="product-price">$12.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Termo Tipo Stanley" data-price="12.99" data-image="imagenes/Termo5.png">Add to carrito</button>
+              
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/Termo6.png" alt="Termo Blanco" class="product-image">
+                <div class="product-name">Termo Blanco</div>
+                <div class="product-price">$14.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Termo Blanco" data-price="14.99" data-image="imagenes/Termo6.png">Add to carrito</button>
+
+            </div>
+        </div>
+    </div>
+
+    <h3>Accesorios - Libretas</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/Libreta1.png" alt="Libreta Clasica Negra" class="product-image">
+                <div class="product-name">Libreta Clasica Negra</div>
+                <div class="product-price">$10.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Libreta Clasica Negra" data-price="10.99" data-image="imagenes/Libreta1.png">Add to carrito</button>
+                
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/Libreta6.png" alt="Libreta Verde" class="product-image">
+                <div class="product-name">Libreta Verde</div>
+                <div class="product-price">$12.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Libreta Verde" data-price="12.99" data-image="imagenes/Libreta6.png">Add to carrito</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/Libreta7.png" alt="Libreta Negra" class="product-image">
+                <div class="product-name">Libreta Negra</div>
+                <div class="product-price">$14.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Libreta Negra" data-price="14.99" data-image="imagenes/Libreta7.png">Add to carrito</button>
+                
+            </div>
+        </div>
+    </div>
+
+    <h3>Cafés</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/vainilla.png" alt="Café con Vainilla" class="product-image">
+                <div class="product-name">Café con Vainilla</div>
+                <div class="product-price">$10.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Café con Vainilla" data-price="10.99" data-image="imagenes/vainilla.png">Add to carrito</button>
+                
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/Chocolate.png" alt="Café Con Chocolate" class="product-image">
+                <div class="product-name">Café con Chocolate</div>
+                <div class="product-price">$12.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Café Con Chocolate" data-price="12.99" data-image="imagenes/Chocolate.png">Add to carrito</button>
+                
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/Cafépuro.png" alt="Café Puro" class="product-image">
+                <div class="product-name">Cafe Puro</div>
+                <div class="product-price">$14.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Café Puro" data-price="14.99" data-image="imagenes/Cafépuro.png">Add to carrito</button>
+            </div>
+        </div>
+    </div>
+    
+
+    <h3>Postres</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/selvanegra.png" alt="Selva Negra" class="product-image">
+                <div class="product-name">Selva Negra</div>
+                <div class="product-price">$10.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Selva Negra" data-price="10.99" data-image="imagenes/selvanegra.png">Add to carrito</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/redvelvet.png" alt="Red Velvet" class="product-image">
+                <div class="product-name">Red Velvet</div>
+                <div class="product-price">$12.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Red Velvet" data-price="12.99" data-image="imagenes/redvelvet.png">Add to carrito</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="/static/tresleches.png" alt="Tres Leches" class="product-image">
+                <div class="product-name">Tres Leches</div>
+                <div class="product-price">$14.99</div>
+                <button class="btn btn-primary add-to-cart" data-name="Tres Leches" data-price="14.99" data-image="imagenes/tresleches.png">Add to carrito</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.getElementById('categorySelect').addEventListener('change', function() {
+        const selectedCategory = this.value;
+        document.querySelectorAll('.product-card').forEach(card => {
+            if (selectedCategory === 'all' || card.getAttribute('data-category') === selectedCategory) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
+  
+<script>
+  function addToCart(product) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push(product); 
+      localStorage.setItem('cart', JSON.stringify(cart)); 
+      alert(`${product.name} ha sido añadido al carrito`);
+  }
+
+  // Asignar evento a todos los botones "Add to carrito"
+  document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', function() {
+          const product = {
+              name: this.getAttribute('data-name'),
+              price: parseFloat(this.getAttribute('data-price')),
+              image: this.getAttribute('data-image')
+          };
+          addToCart(product); // Llamar la función para agregar el producto al carrito
+      });
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+{% endblock %}
+
+
