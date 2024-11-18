@@ -1,30 +1,21 @@
-# from flask import Flask, redirect, url_for, render_template
+# """importamos"""
+# from flask import Flask
+# #instanciamos de models (objeto db) db, y baseD (vinculamos)
+# from Temerarios.backend.models import db, Usuario, Producto, CategoriaProducto, Carrito, Ordenes, Pago, Cupones
+
 
 # app = Flask(__name__)
+# app.config['SQLALCHEMY_DATABASE_URI'] = (
+#     'sqlite:///C:\\Users\\USUARIO\\Rincon-Temerario-del-Cafe\\Temerarios\\backend\\baseD.db'
+# )
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# @app.route('/')
-# def index():
-#     return render_template('index.html')
+# # Inicializamos la base de datos con la app
+# db.init_app(app)
 
-# @app.route('/about')
-# def about():
-#     return render_template('about.html')
-
-# @app.route('/coffeeshop')
-# def coffeeshop():
-#     return render_template('Coffeeshop.html')
-
-# @app.route('/carrito')
-# def carrito():
-#     return render_template('carrito.html')
-
-# @app.route('/register', methods=['GET', 'POST'])
-# def register():
-#     return render_template('register.html')
-
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     return render_template('login.html')
-
+# #las rutas van aca
 # if __name__ == '__main__':
+#     with app.app_context():
+#         db.create_all()  # Crea las tablas si no existen
+#         #HOLA
 #     app.run(debug=True)

@@ -1,7 +1,7 @@
 """Importamos sql"""
 import sqlite3 as sql
 
-DB_PATH="C:\\Users\\USUARIO\\Rincon-Temerario-del-Cafe\\Temerarios\\backend\\baseD.db"
+DB_PATH="C:\\Users\\LENOVO\\Desktop\\Rincon-Temerario-del-Cafe-2\\Temerarios\\backend\\baseD.db"
 
 #funcion para crear la conexion
 def crear_db():
