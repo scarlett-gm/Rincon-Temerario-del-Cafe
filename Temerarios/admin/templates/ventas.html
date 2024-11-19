@@ -21,24 +21,69 @@
           <div class="collapse navbar-collapse" id="navbarNav">
               <ul class="navbar-nav ms-auto">
                   <li class="nav-item">
-                      <a class="nav-link nav-animated" href="index.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Inicio</a>
+                      <a class="nav-link nav-animated" href="index1.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Inicio</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link nav-animated" href="about.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Nosotros</a>
+                      <a class="nav-link nav-animated" href="pedidos.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Pedidos</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link nav-animated" href="Coffeeshop.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Coffee Shop</a>
+                      <a class="nav-link nav-animated" href="ventas.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Ventas</a>
                   </li>
+                  <li class="nav-item">
+                    <a class="nav-link nav-animated" href="productos.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Productos</a>
+                </li>
               </ul>
           </div>
       </div>
   </nav>
   
-    
-    <!-- Footer Section -->
-    <footer >
-        <p>&copy; 2024 Rincón Temerario del Café. Todos los derechos reservados.</p>
-    </footer>
+  <div class="container my-5">
+    <h2>Historial de Ventas</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Producto</th>
+                <th>Cliente</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody id="salesList">
+            <!-- Los pedidos finalizados se agregarán aquí dinámicamente -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Mostrar historial de ventas
+    function renderSales() {
+        const salesList = document.getElementById('salesList');
+        const sales = JSON.parse(localStorage.getItem('sales')) || [];
+
+        if (sales.length === 0) {
+            salesList.innerHTML = '<tr><td colspan="4">No hay ventas registradas.</td></tr>';
+            return;
+        }
+
+        salesList.innerHTML = '';  // Limpiar tabla
+
+        sales.forEach((sale, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${sale.product}</td>
+                <td>${sale.customer}</td>
+                <td>${new Date().toLocaleString()}</td>
+            `;
+            salesList.appendChild(row);
+        });
+    }
+
+    // Cargar ventas al inicio
+    window.onload = function() {
+        renderSales();
+    };
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
