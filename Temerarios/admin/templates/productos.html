@@ -8,40 +8,63 @@
     <link rel="stylesheet" href="style1.css">
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #AAB396; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-    <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="index.html">
-            <img src="/imagenes/logosinfondo.png" alt="RTC" class="me-2" style="max-width: 100px; height: auto;">
-            <span style="font-weight: bold; font-size: 1.5rem; color: #000000; transition: all 0.3s;">Rincón Temerario</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="padding: 5px 0;">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img src="/imagenes/logosinfondo.png" alt="RTC" class="my-2" style="max-width: 150px; height: auto;">
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link nav-animated" href="index1.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-animated" href="pedidos.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Pedidos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-animated" href="ventas.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Ventas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-animated" href="productos.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Productos</a>
-                </li>
+              <li class="nav-item"><a class="nav-link active" href="index1.html" style="color: black; font-size: 18px;">Inicio</a></li>
+              <li class="nav-item"><a class="nav-link" href="pedidos.html" style="color: black; font-size: 18px;">Pedidos</a></li>
+              <li class="nav-item"><a class="nav-link" href="ventas.html" style="color: black; font-size: 18px;">Productos</a></li>
+              <li class="nav-item"><a class="nav-link" href="productos.html" style="color: black; font-size: 18px;">Ventas</a></li>
             </ul>
+          </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-
-
-
-
-
-
+    <div class="container mt-5">
+      <div class="card mx-auto p-4" style="max-width: 600px; background-color: #F7F3E9; border-radius: 12px; box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);">
+          <h2 class="text-center mb-4" style="color: #4E342E; font-weight: bold;">Agregar Producto</h2>
+          <form>
+              <!-- Nombre del Producto -->
+              <div class="mb-3">
+                  <label for="productName" class="form-label" style="color: #4E342E; font-size: 1rem; font-weight: bold;">Nombre del Producto</label>
+                  <input type="text" class="form-control" id="productName" placeholder="Ejemplo: Capuchino" style="border: 1px solid #D5D5D5; border-radius: 8px;" required>
+              </div>
+              <!-- Precio -->
+              <div class="mb-3">
+                  <label for="productPrice" class="form-label" style="color: #4E342E; font-size: 1rem; font-weight: bold;">Precio</label>
+                  <input type="number" class="form-control" id="productPrice" placeholder="Ejemplo: 3.50" min="0" step="0.01" style="border: 1px solid #D5D5D5; border-radius: 8px;" required>
+              </div>
+              <!-- Categoría -->
+              <div class="mb-3">
+                  <label for="productCategory" class="form-label" style="color: #4E342E; font-size: 1rem; font-weight: bold;">Categoría</label>
+                  <select class="form-select" id="productCategory" style="border: 1px solid #D5D5D5; border-radius: 8px;" required>
+                      <option selected disabled>Seleccione una categoría</option>
+                      <option value="Café">Café</option>
+                      <option value="Postres">Postres</option>
+                      <option value="Accesorios">Accesorios</option>
+                  </select>
+              </div>
+              <!-- URL Imagen -->
+              <div class="mb-4">
+                  <label for="productImage" class="form-label" style="color: #4E342E; font-size: 1rem; font-weight: bold;">Imagen del Producto (URL)</label>
+                  <input type="url" class="form-control" id="productImage" placeholder="Ejemplo: https://imagen.com/producto.jpg" style="border: 1px solid #D5D5D5; border-radius: 8px;">
+              </div>
+              <!-- Botón -->
+              <div class="text-center">
+                  <button type="submit" class="btn" style="background-color: #4E342E; color: #FFFFFF; padding: 10px 20px; font-size: 1rem; font-weight: bold; border-radius: 8px;">Agregar Producto</button>
+              </div>
+          </form>
+      </div>
+  </div>
+  
     
     <!-- Footer Section -->
     <footer >
