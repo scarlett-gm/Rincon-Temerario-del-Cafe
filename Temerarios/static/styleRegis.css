@@ -1,0 +1,93 @@
+body {
+    background-color: #AAB396; /* Fondo suave y claro */
+    font-family: 'Roboto', sans-serif;
+}
+
+.register-container {
+    max-width: 450px;
+    margin: auto;
+    padding: 30px;
+    background-color: #FFF8E8;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 100px;
+}
+
+.register-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #000000;
+    font-weight: bold;
+    font-size: 32px;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #000000;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 18px;
+    font-size: 16px;
+    border: 1px solid #FFF8E8;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.form-control:focus {
+    border-color: #6c757d;
+    box-shadow: 0 0 5px rgba(108, 117, 125, 0.5);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    background-color: #b4775b;
+    border: none;
+    border-radius: 8px;
+    color: black;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #FFF8E8;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+    background-color: #836455;
+    color: white;
+}
+
+.footer a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}

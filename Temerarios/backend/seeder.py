@@ -8,10 +8,9 @@ def crear_db():
     """Creamos"""
     conn=sql.connect(DB_PATH)
     cursor=conn.cursor()
-
     cursor.execute(
-        """ CREATE TABLE Usuario (
-        IdUsuario INT PRIMARY KEY,
+        """  CREATE TABLE Usuario (
+        IdUsuario INT PRIMARY KEY AUTOINCREMENT,
         Username TEXT,
         Nombres TEXT,
         Apellido TEXT,
@@ -22,7 +21,7 @@ def crear_db():
 
     cursor.execute(
         """CREATE TABLE Producto (
-        IdProducto INT PRIMARY KEY,
+        IdProducto INT PRIMARY KEY AUTOINCREMENT,
         IdCatePro INT,
         Nombre TEXT,
         Precio FLOAT,
@@ -33,14 +32,14 @@ def crear_db():
 
     cursor.execute(
         """CREATE TABLE CategoriaProducto (
-        IdCatePro INT PRIMARY KEY,
+        IdCatePro INT PRIMARY KEY AUTOINCREMENT,
         NombreCategoria TEXT
     )"""
     )
 
     cursor.execute(
         """CREATE TABLE Carrito (
-        IdCarrito INT PRIMARY KEY,
+        IdCarrito INT PRIMARY KEY AUTOINCREMENT,
         IdUsuario INT,
         IdProducto INT,
         CantidadPedido INT,
@@ -53,7 +52,7 @@ def crear_db():
 
     cursor.execute(
         """CREATE TABLE Ordenes (
-        IdOrden INT PRIMARY KEY,
+        IdOrden INT PRIMARY KEY AUTOINCREMENT,
         IdUsuario INT,
         IdProducto INT,
         DetallesProducto TEXT,
@@ -66,7 +65,7 @@ def crear_db():
 
     cursor.execute(
         """CREATE TABLE Pago (
-        IdPago INT PRIMARY KEY,
+        IdPago INT PRIMARY KEY AUTOINCREMENT,
         MetodoPago TEXT,
         IdUsuario INT,
         IdOrden INT,
@@ -79,13 +78,22 @@ def crear_db():
     )
     cursor.execute(
         """CREATE TABLE Cupones (
-        IdCupon INT PRIMARY KEY,
+        IdCupon INT PRIMARY KEY AUTOINCREMENT,
         IdUsuario INT,
         CodigoPromocional TEXT,
         DetallesCupon TEXT,
         FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario)
     )"""
     )
+    cursor.execute(
+        """CREATE TABLE Info_Producto(
+        IdProducto TEXT PRIMARY KEY AUTOINCREMENT,
+        IdCatePro INTEGER 
+        NombreProducto TEXT NOT NULL,
+        Precio INTEGER NOT NULL,
+        Url TEXT NOT NULL,
+        FOREIGN KEY (IdProducto) REFERENCES CategoriaProducto(IdCatePro)
+    )""")
     conn.commit()
     conn.close()
 
@@ -145,7 +153,33 @@ def agregar_valor():
         (3, 3, "FIESTA20", "20% de descuento en compras mayores a $50")
     ]
     cursor.executemany("""INSERT INTO Cupones VALUES (?, ?, ?, ?)""", data7)
-
+    data8 = [
+        ("Tazas"),
+        ("Termos"),
+        ("Libretas"),
+        ("Cafés"),
+        ("Postres")
+    ]
+    cursor.executemany("""INSERT INTO CategoriaProducto VALUES (?)""", data8)
+    data9 = [
+        ("Tazas","Taza con Cuchara", 10.99, "Taza3.png"),
+        ("Tazas","Taza Negra", 12.99, "Taza4.png"),
+        ("Tazas","Taza Blanca", 14.99, "Taza1.png"),
+        ("Termos","Termo Clasico", 10.99,"Termo3.png"),
+        ("Termos","Termo Tipo Stanley", 12.99, "Termo5.png"),
+        ("Termos","Termo Blanco", 14.99, "Termo6.png"),
+        ("Libretas","Libreta Clasica Negra", 10.99, "Libreta1.png"),
+        ("Libretas","Libreta Verde", 12.99, "Libreta6.png"),
+        ("Libretas","Libreta Negra", 14.99, "Libreta7.png"),
+        ("Cafés","Café con Vainilla", 10.99, "vainilla.png"),
+        ("Cafés","Café con Chocolate", 12.99, "Chocolate.png"),
+        ("Cafés","Cafe Puro", 14.99, "Cafépuro.png"),
+        ("Postres","Selva Negra", 10.99, "selvanegra.png"),
+        ("Postres","Red Velvet", 12.99, "redvelvet.png"),
+        ("Postres","Tres Leches", 14.99, "tresleches.png")
+        
+    ]
+    cursor.executemany("""INSERT INTO Info_Producto VALUES (?, ?, ?, ?,?)""", data9)
     conn.commit()
     conn.close()
 
