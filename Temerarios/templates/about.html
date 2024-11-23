@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-<nav class="navbar navbar-expand-lg navbar-dark" style="padding: 5px 0;">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #AAB396; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
             <img src="/static/logosinfondo.png" alt="RTC" class="my-2" style="max-width: 150px; height: auto;">
@@ -15,9 +15,17 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link active" href="{{ url_for('index') }}" style="color: black; font-size: 18px; text-align: justify;">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="/about" style="color: black; font-size: 18px;">Nosotros</a></li>
-                <li class="nav-item"><a class="nav-link" href="/Coffeeshop" style="color: black; font-size: 18px;">Coffee Shop</a></li>
+                <li class="nav-link nav-animated"><a class="nav-link active" href="{{ url_for('index') }}" style="color: black; font-size: 18px; text-align: justify;">Inicio</a></li>
+                <li class="nav-link nav-animated"><a class="nav-link" href="/about" style="color: black; font-size: 18px;">Nosotros</a></li>
+                <li class="nav-link nav-animated"><a class="nav-link" href="/Coffeeshop" style="color: black; font-size: 18px;">Coffee Shop</a></li>
+                {% if session.get('user') %}
+                <li class="nav-item">
+                    <a class="nav-link nav-animated" href="/carrito" style="color: #000000; font-size: 18px; margin: 0 10px;">Carrito</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-animated" href="{{ url_for('logout') }}" style="color: #000000; font-size: 18px; margin: 0 10px;">Cerrar sesión</a>
+                </li>
+                {% endif %}
                
             </ul>
         </div>
@@ -31,7 +39,7 @@
         La cafetería Rincón Temerario del Café nació de la pasión por el café de calidad y el deseo de crear un espacio acogedor ambientado en el viejo oeste. Desde nuestros humildes comienzos como una pequeña cafetería de barrio, hemos crecido para convertirnos en un punto de encuentro querido por la comunidad, manteniendo siempre nuestro compromiso con la excelencia y la calidez en el servicio.
     </p>
     <div class="text-center">
-        <img src="/static/Logofinal.png" style="width: 100%; max-width: 1100px; height: 400px;" class="img-fluid" alt="Sobre Nosotros">
+        <img src="/static/tiendita.jpg" style="width: 100%; max-width: 1100px; height: 400px;" class="img-fluid" alt="Sobre Nosotros">
     </div>
 </div>
 
@@ -94,7 +102,7 @@
         <div class="col-md-3 mb-4">
             <div class="card border-0 shadow-sm p-3 h-100">
                 <div class="card-body d-flex flex-column align-items-center">
-                    <img src="/static/twitteer.png" style="width: 200px; height: 200px; border-radius: 100px;" class="mb-3">
+                    <img src="/static/roier.jpg" style="width: 200px; height: 200px; border-radius: 100px;" class="mb-3">
                     <h5 class="card-title">Roger Alaniz</h5>
                     <p class="card-text">Desarrollador Backend</p>
                 </div>
@@ -103,7 +111,7 @@
         <div class="col-md-3 mb-4">
             <div class="card border-0 shadow-sm p-3 h-100">
                 <div class="card-body d-flex flex-column align-items-center">
-                    <img src="/static/twitteer.png" style="width: 200px; height: 200px; border-radius: 100px;" class="mb-3">
+                    <img src="/static/scarlet.jpg" style="width: 200px; height: 200px; border-radius: 100px;" class="mb-3">
                     <h5 class="card-title">Scarlett Martinez</h5>
                     <p class="card-text">Desarrolladora Frontend</p>
                 </div>
