@@ -49,9 +49,11 @@ class Carrito(db.Model):
     IdCarrito=db.Column(db.Integer, primary_key=True)
     IdUsuario=db.Column(db.Integer, db.ForeignKey('Usuario.IdUsuario'))
     IdProducto=db.Column(db.Integer, db.ForeignKey('Producto.IdProducto'))
-    CantidadP=db.Column(db.Integer)
+    CantidadPedido=db.Column(db.Integer)
     Fecha=db.Column(db.String(50))
     Total=db.Column(db.Float)
+
+    
 
 class Ordenes (db.Model):
     """Tabla Ordenes"""
@@ -71,7 +73,9 @@ class Pago(db.Model):
     IdOrden = db.Column(db.Integer, db.ForeignKey('Ordenes.IdOrden'))  # Aquí cambia de 'Orden.IdOrden' a 'Ordenes.IdOrden'
     IdUsuario = db.Column(db.Integer, db.ForeignKey('Usuario.IdUsuario'))
     TotalPagar = db.Column(db.Integer)
-    FechaPago = db.Column(db.String(50))
+    # FechaPago = db.Column(db.String(50))
+
+    
 
 class Cupones(db.Model):
     """Tabla de Cupones que tendra el cliente"""
@@ -91,3 +95,14 @@ class InfoProducto(db.Model):
     Url = db.Column(db.String(100))
     
     categoria = db.relationship('CategoriaProducto', backref='info_productos', lazy=True)
+
+class CarrioVolatil(db.Model):
+    """Tabla Carrito Volátil (Temporal)"""
+    __tablename__ = 'CarrioVolatil'
+    IdCarrito = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    IdUser = db.Column(db.Integer, db.ForeignKey('Usuario.IdUsuario'), nullable=False)
+    Producto = db.Column(db.String(100), nullable=False)
+    Cantidad = db.Column(db.Integer, nullable=False)  
+    Total = db.Column(db.Float, nullable=False)  
+
+    usuario = db.relationship('Usuario', backref='carrio_volatil', lazy=True)

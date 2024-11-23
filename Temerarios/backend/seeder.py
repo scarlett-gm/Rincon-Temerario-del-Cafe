@@ -1,190 +1,170 @@
-"""Importamos sql"""
 import sqlite3 as sql
 
-DB_PATH="C:\\Users\\LENOVO\\Desktop\\Rincon-Temerario-del-Cafe-2\\Temerarios\\backend\\baseD.db"
+DB_PATH = "C:\\Users\\LENOVO\\Desktop\\Rincon-Temerario-del-Cafe-2\\Temerarios\\backend\\baseD.db"
 
-#funcion para crear la conexion
+
 def crear_db():
-    """Creamos"""
-    conn=sql.connect(DB_PATH)
-    cursor=conn.cursor()
-    cursor.execute(
-        """  CREATE TABLE Usuario (
-        IdUsuario INT PRIMARY KEY AUTOINCREMENT,
-        Username TEXT,
-        Nombres TEXT,
-        Apellido TEXT,
-        Correo TEXT,
-        Contraseña TEXT
-    )"""
-    )
-
-    cursor.execute(
-        """CREATE TABLE Producto (
-        IdProducto INT PRIMARY KEY AUTOINCREMENT,
-        IdCatePro INT,
-        Nombre TEXT,
-        Precio FLOAT,
-        CantidadEnStock INTEGER,
-        FOREIGN KEY (IdCatePro) REFERENCES CategoriaProducto(IdCatePro)
-    )"""
-    )
-
-    cursor.execute(
-        """CREATE TABLE CategoriaProducto (
-        IdCatePro INT PRIMARY KEY AUTOINCREMENT,
-        NombreCategoria TEXT
-    )"""
-    )
-
-    cursor.execute(
-        """CREATE TABLE Carrito (
-        IdCarrito INT PRIMARY KEY AUTOINCREMENT,
-        IdUsuario INT,
-        IdProducto INT,
-        CantidadPedido INT,
-        Fecha TEXT,
-        Total FLOAT,
-        FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
-        FOREIGN KEY (IdUsuario) REFERENCES Producto(IdProducto)
-    )"""
-    )
-
-    cursor.execute(
-        """CREATE TABLE Ordenes (
-        IdOrden INT PRIMARY KEY AUTOINCREMENT,
-        IdUsuario INT,
-        IdProducto INT,
-        DetallesProducto TEXT,
-        Cantidad INT,
-        FechaOrden TEXT,
-        FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
-        FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto)
-    )"""
-    )
-
-    cursor.execute(
-        """CREATE TABLE Pago (
-        IdPago INT PRIMARY KEY AUTOINCREMENT,
-        MetodoPago TEXT,
-        IdUsuario INT,
-        IdOrden INT,
-        TotalPagar FLOAT,
-        FechaPago TEXT,
-        FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
-        FOREIGN KEY (IdOrden) REFERENCES Ordenes(IdOrden)
-
-    )"""
-    )
-    cursor.execute(
-        """CREATE TABLE Cupones (
-        IdCupon INT PRIMARY KEY AUTOINCREMENT,
-        IdUsuario INT,
-        CodigoPromocional TEXT,
-        DetallesCupon TEXT,
-        FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario)
-    )"""
-    )
-    cursor.execute(
-        """CREATE TABLE Info_Producto(
-        IdProducto TEXT PRIMARY KEY AUTOINCREMENT,
-        IdCatePro INTEGER 
-        NombreProducto TEXT NOT NULL,
-        Precio INTEGER NOT NULL,
-        Url TEXT NOT NULL,
-        FOREIGN KEY (IdProducto) REFERENCES CategoriaProducto(IdCatePro)
-    )""")
-    conn.commit()
-    conn.close()
-
-def agregar_valor():
-    """Agregamos valores a mi base de datos para probar"""
+    """Crear la base de datos y sus tablas"""
     conn = sql.connect(DB_PATH)
     cursor = conn.cursor()
 
-    # Datos para la tabla Usuario
-    data = [
-        (1, "Carobolita", "Carolina", "Reyes", "carolreyes@gmail.com", "caradebolita123"),
-        (2, "Anitaloquita", "Ana", "Rosales", "anaMaria@gmail.com", "miaumiau12"),
-        (3, "Josesss", "Jose", "Arauz", "josemartinezA@gmail.com", "123opppo")
-    ]
-    cursor.executemany("""INSERT INTO Usuario VALUES (?, ?, ?, ?, ?, ?)""", data)
+    # Crear tablas
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS CategoriaProducto (
+            IdCatePro INTEGER PRIMARY KEY AUTOINCREMENT,
+            NombreCategoria TEXT NOT NULL
+        )"""
+    )
 
-    # Datos para la tabla Producto
-    data2 = [
-        (1, 1, "Selva negra", 10.00, 10)
-    ]
-    cursor.executemany("""INSERT INTO Producto VALUES (?, ?, ?, ?, ?)""", data2)
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS Usuario (
+            IdUsuario INTEGER PRIMARY KEY AUTOINCREMENT,
+            Username TEXT NOT NULL,
+            Nombres TEXT NOT NULL,
+            Apellido TEXT NOT NULL,
+            Correo TEXT NOT NULL UNIQUE,
+            Contraseña TEXT NOT NULL
+        )"""
+    )
 
-    # Datos para la tabla CategoriaProducto
-    data3 = [
-        (1, "Postres")
-    ]
-    cursor.executemany("""INSERT INTO CategoriaProducto VALUES (?, ?)""", data3)
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS Producto (
+            IdProducto INTEGER PRIMARY KEY AUTOINCREMENT,
+            IdCatePro INTEGER NOT NULL,
+            Nombre TEXT NOT NULL,
+            Precio FLOAT NOT NULL,
+            CantidadEnStock INTEGER NOT NULL,
+            FOREIGN KEY (IdCatePro) REFERENCES CategoriaProducto(IdCatePro)
+        )"""
+    )
 
-    # Datos para la tabla Carrito
-    data4 = [
-        (1, 1, 1, 2, "2024-11-15", 20.00),
-        (2, 2, 1, 1, "2024-11-15", 10.00),
-        (3, 3, 1, 3, "2024-11-15", 30.00)
-    ]
-    cursor.executemany("""INSERT INTO Carrito VALUES (?, ?, ?, ?, ?, ?)""", data4)
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS Carrito (
+            IdCarrito INTEGER PRIMARY KEY AUTOINCREMENT,
+            IdUsuario INTEGER NOT NULL,
+            IdProducto INTEGER NOT NULL,
+            CantidadPedido INTEGER NOT NULL,
+            Fecha TEXT NOT NULL,
+            Total FLOAT NOT NULL,
+            FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
+            FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto)
+        )"""
+    )
 
-    # Datos para la tabla Ordenes
-    data5 = [
-        (1, 1, 1, "Selva negra", 2, "2024-11-15"),
-        (2, 2, 1, "Selva negra", 1, "2024-11-15"),
-        (3, 3, 1, "Selva negra", 3, "2024-11-15")
-    ]
-    cursor.executemany("""INSERT INTO Ordenes VALUES (?, ?, ?, ?, ?, ?)""", data5)
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS Ordenes (
+            IdOrden INTEGER PRIMARY KEY AUTOINCREMENT,
+            IdUsuario INTEGER NOT NULL,
+            IdProducto INTEGER NOT NULL,
+            DetallesProducto TEXT NOT NULL,
+            Cantidad INTEGER NOT NULL,
+            FechaOrden TEXT NOT NULL,
+            FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
+            FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto)
+        )"""
+    )
 
-    # Datos para la tabla Pago
-    data6 = [
-        (1, "Tarjeta de crédito", 1, 1, 20.00, "2024-11-15"),
-        (2, "PayPal", 2, 2, 10.00, "2024-11-15"),
-        (3, "Efectivo", 3, 3, 30.00, "2024-11-15")
-    ]
-    cursor.executemany("""INSERT INTO Pago VALUES (?, ?, ?, ?, ?, ?)""", data6)
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS Pago (
+            IdPago INTEGER PRIMARY KEY AUTOINCREMENT,
+            MetodoPago TEXT NOT NULL,
+            IdUsuario INTEGER NOT NULL,
+            IdOrden INTEGER NOT NULL,
+            TotalPagar FLOAT NOT NULL,
+            FechaPago TEXT NOT NULL,
+            FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
+            FOREIGN KEY (IdOrden) REFERENCES Ordenes(IdOrden)
+        )"""
+    )
 
-    # Datos para la tabla Cupones
-    data7 = [
-        (1, 1, "DESCUENTO10", "10% de descuento en tu próxima compra"),
-        (2, 2, "BIENVENIDO15", "15% de descuento para nuevos clientes"),
-        (3, 3, "FIESTA20", "20% de descuento en compras mayores a $50")
-    ]
-    cursor.executemany("""INSERT INTO Cupones VALUES (?, ?, ?, ?)""", data7)
-    data8 = [
-        ("Tazas"),
-        ("Termos"),
-        ("Libretas"),
-        ("Cafés"),
-        ("Postres")
-    ]
-    cursor.executemany("""INSERT INTO CategoriaProducto VALUES (?)""", data8)
-    data9 = [
-        ("Tazas","Taza con Cuchara", 10.99, "Taza3.png"),
-        ("Tazas","Taza Negra", 12.99, "Taza4.png"),
-        ("Tazas","Taza Blanca", 14.99, "Taza1.png"),
-        ("Termos","Termo Clasico", 10.99,"Termo3.png"),
-        ("Termos","Termo Tipo Stanley", 12.99, "Termo5.png"),
-        ("Termos","Termo Blanco", 14.99, "Termo6.png"),
-        ("Libretas","Libreta Clasica Negra", 10.99, "Libreta1.png"),
-        ("Libretas","Libreta Verde", 12.99, "Libreta6.png"),
-        ("Libretas","Libreta Negra", 14.99, "Libreta7.png"),
-        ("Cafés","Café con Vainilla", 10.99, "vainilla.png"),
-        ("Cafés","Café con Chocolate", 12.99, "Chocolate.png"),
-        ("Cafés","Cafe Puro", 14.99, "Cafépuro.png"),
-        ("Postres","Selva Negra", 10.99, "selvanegra.png"),
-        ("Postres","Red Velvet", 12.99, "redvelvet.png"),
-        ("Postres","Tres Leches", 14.99, "tresleches.png")
-        
-    ]
-    cursor.executemany("""INSERT INTO Info_Producto VALUES (?, ?, ?, ?,?)""", data9)
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS Cupones (
+            IdCupon INTEGER PRIMARY KEY AUTOINCREMENT,
+            IdUsuario INTEGER NOT NULL,
+            CodigoPromocional TEXT NOT NULL,
+            DetallesCupon TEXT NOT NULL,
+            FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario)
+        )"""
+    )
+
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS Info_Producto (
+            IdInfoProducto INTEGER PRIMARY KEY AUTOINCREMENT,
+            IdCatePro INTEGER NOT NULL,
+            NombreProducto TEXT NOT NULL,
+            Precio FLOAT NOT NULL,
+            Url TEXT NOT NULL,
+            FOREIGN KEY (IdCatePro) REFERENCES CategoriaProducto(IdCatePro)
+        )"""
+    )
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS CarrioVolatil(
+            IdCarrito INTEGER PRIMARY KEY AUTOINCREMENT,
+            IdUser INTEGER NOT NULL,
+            Producto TEXT NOT NULL,
+            Cantidad INTEGER TEXT NOT NULL,
+            Total INTEGER NOT NULL,
+            FOREING KEY (IdUser) REFERENCES Usuario(IdUsuario)
+        )
+        """)
+
     conn.commit()
     conn.close()
 
 
-if __name__== "__main__":
+def agregar_valor():
+    """Agregar valores a la base de datos"""
+    conn = sql.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    # Datos para la tabla CategoriaProducto
+    try:
+        categorias = [
+            ("Tazas",),
+            ("Termos",),
+            ("Libretas",),
+            ("Cafés",),
+            ("Postres",),
+        ]
+        cursor.executemany("""INSERT INTO CategoriaProducto (NombreCategoria) VALUES (?)""", categorias)
+
+        # Datos para la tabla Usuario
+        usuarios = [
+            ("Carobolita", "Carolina", "Reyes", "carolreyes@gmail.com", "caradebolita123"),
+            ("Anitaloquita", "Ana", "Rosales", "anaMaria@gmail.com", "miaumiau12"),
+            ("Josesss", "Jose", "Arauz", "josemartinezA@gmail.com", "123opppo"),
+        ]
+        cursor.executemany("""INSERT INTO Usuario (Username, Nombres, Apellido, Correo, Contraseña) VALUES (?, ?, ?, ?, ?)""", usuarios)
+
+        # Datos para la tabla Info_Producto
+        productos = [
+            (1, "Taza con Cuchara", 10.99, "Taza3.png"),
+            (1, "Taza Negra", 12.99, "Taza4.png"),
+            (1, "Taza Blanca", 14.99, "Taza1.png"),
+            (2, "Termo Clasico", 10.99, "Termo3.png"),
+            (2, "Termo Tipo Stanley", 12.99, "Termo5.png"),
+            (2, "Termo Blanco", 14.99, "Termo6.png"),
+            (3, "Libreta Clasica Negra", 10.99, "Libreta1.png"),
+            (3, "Libreta Verde", 12.99, "Libreta6.png"),
+            (3, "Libreta Negra", 14.99, "Libreta7.png"),
+            (4, "Café con Vainilla", 10.99, "vainilla.png"),
+            (4, "Café con Chocolate", 12.99, "Chocolate.png"),
+            (4, "Cafe Puro", 14.99, "Cafépuro.png"),
+            (5, "Selva Negra", 10.99, "selvanegra.png"),
+            (5, "Red Velvet", 12.99, "redvelvet.png"),
+            (5, "Tres Leches", 14.99, "tresleches.png"),
+        ]
+        cursor.executemany("""INSERT INTO Info_Producto (IdCatePro, NombreProducto, Precio, Url) VALUES (?, ?, ?, ?)""", productos)
+
+        conn.commit()
+    except sql.Error as e:
+        print(f"Error al insertar datos: {e}")
+    finally:
+        conn.close()
+
+
+if __name__ == "__main__":
     crear_db()
-    print("Hola")
+    print("roger mama huevo")
     agregar_valor()

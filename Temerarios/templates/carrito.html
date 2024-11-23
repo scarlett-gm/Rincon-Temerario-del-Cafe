@@ -1,38 +1,55 @@
-
 {% extends "index.html" %}
 
 {% block title %}
-    Carrito
+Carrito
 {% endblock %}
 
 {% block main %}
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #AAB396; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.js"></script>
+<nav class="navbar navbar-expand-lg navbar-light"
+    style="background-color: #AAB396; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="index.html">
-            <img src="/imagenes/logosinfondo.png" alt="RTC" class="me-2" style="max-width: 100px; height: auto;">
-            <span style="font-weight: bold; font-size: 1.5rem; color: #000000; transition: all 0.3s;">Rincón Temerario</span>
+            <img src="/static/logosinfondo.png" alt="RTC" class="me-2" style="max-width: 100px; height: auto;">
+            <span style="font-weight: bold; font-size: 1.5rem; color: #000000; transition: all 0.3s;">Rincón
+                Temerario</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link nav-animated" href="index.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Inicio</a>
+                    <a class="nav-link nav-animated" href="{{ url_for('index') }}"
+                        style="color: #000000; font-size: 18px; margin: 0 10px;">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-animated" href="about.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Nosotros</a>
+                    <a class="nav-link nav-animated" href="/about"
+                        style="color: #000000; font-size: 18px; margin: 0 10px;">Nosotros</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-animated" href="Coffeeshop.html" style="color: #000000; font-size: 18px; margin: 0 10px;">Coffee Shop</a>
+                    <a class="nav-link nav-animated" href="/Coffeeshop"
+                        style="color: #000000; font-size: 18px; margin: 0 10px;">Coffee Shop</a>
                 </li>
+                {% if session.get('user') %}
+                <li class="nav-item">
+                    <a class="nav-link nav-animated" href="/carrito"
+                        style="color: #000000; font-size: 18px; margin: 0 10px;">Carrito</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-animated" href="{{ url_for('logout') }}" style="color: #000000; font-size: 18px; margin: 0 10px;">Cerrar sesión</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>
 </nav>
 
- <!-- Carrito Section -->
- <div class="container my-5">
+<!-- Carrito Section -->
+<div class="container my-5">
     <h2>Tu Carrito</h2>
     <p>Aquí están los productos que has añadido.</p>
 
@@ -50,13 +67,25 @@
             </thead>
             <tbody id="cartItems">
                 <!-- Los productos del carrito se agregarán aquí dinámicamente -->
+                {%for elemento in vali1%}
+                <tr>
+                    <td>{{elemento.Producto}}</td>
+                    <td>{{elemento.Cantidad}}</td>
+                    <td>{{elemento.Total}}</td>
+                    <td>{{elemento.Total}}</td>
+                    <td>
+                        <button style="background-color: red;" class="delete-btn" data-id="{{elemento.IdCarrito}}"
+                            data-nombre="{{elemento.Producto}}">Eliminar</button>
+                    </td>
+                </tr>
+                {%endfor%}
             </tbody>
         </table>
     </div>
 
     <!-- Total -->
     <div class="d-flex justify-content-between align-items-center">
-        <h3 id="totalPrice">Total: $0.00</h3>
+        <h3 id="totalPrice">Total: ${{total}}</h3>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">Finalizar Compra</button>
     </div>
 </div>
@@ -70,10 +99,37 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-                <ul id="paymentDetails">
-                    <!-- Detalles de la compra se llenarán dinámicamente -->
-                </ul>
-                <h3 id="paymentTotal">Total: $0.00</h3>
+                <h3 id="paymentTotal">Total: ${{total}}</h3>
+                <form id="paymentForm">
+                    <div class="mb-3">
+                        <label for="paymentMethod" class="form-label">Método de Pago</label>
+                        <select id="paymentMethod" class="form-select" required>
+                            <option value="" selected disabled>Seleccione un método de pago</option>
+                            <option value="cash">Efectivo</option>
+                            <option value="card">Tarjeta</option>
+                        </select>
+                    </div>
+                    <div id="cashFields" class="payment-fields d-none">
+                        <div class="mb-3">
+                            <label for="cashAmount" class="form-label">Monto a Pagar</label>
+                            <input type="number" class="form-control" id="cashAmount" placeholder="Ingrese el monto en efectivo" min="0" step="0.01">
+                        </div>
+                    </div>
+                    <div id="cardFields" class="payment-fields d-none">
+                        <div class="mb-3">
+                            <label for="cardNumber" class="form-label">Número de Tarjeta</label>
+                            <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="16">
+                        </div>
+                        <div class="mb-3">
+                            <label for="expiryDate" class="form-label">Fecha de Expiración</label>
+                            <input type="month" class="form-control" id="expiryDate">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" class="form-control" id="cvv" placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -83,123 +139,136 @@
     </div>
 </div>
 
+</div>
 <script>
-    // Cargar productos desde localStorage
-    window.onload = function () {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let cartTable = document.getElementById('cartItems');
-        let totalPrice = 0;
+    $(".delete-btn").on("click", function (e) {
+        e.preventDefault();
+        let id = $(this).data("id");
+        let name = $(this).data("nombre")
+        console.log(`Eliminando producto con ID: ${id}`);
+        $.ajax({
+            url: "/eliminar",
+            method: "POST",
+            data: { id: id },
+            success: function (respuesta) {
+                if (respuesta.data === "succces") {
+                    Swal.fire({
+                        title: "Eliminado del carrito",
+                        text: `El producto ${name} borrado con exito`,
+                        icon: "success"
+                    }).then(function () {
+                        // Eliminar la fila correspondiente de la tabla
+                        $(`button[data-id="${id}"]`).closest('tr').remove();
 
-        // Limpiar la tabla antes de agregar productos
-        cartTable.innerHTML = '';
+                        // Actualizar el total si es necesario
+                        actualizarTotal();
+                    });
+                }
+            },
+            error: function (xhr) {
 
-        cart.forEach(product => {
-            const quantity = product.quantity || 1; // Usar cantidad o 1 por defecto
-            const subtotal = product.price * quantity;
+            }
+        })
+    });
 
-            // Crear una fila por cada producto
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${product.name}</td>
-                <td>
-                    <input type="number" class="form-control" value="${quantity}" min="1" data-product="${product.name}">
-                </td>
-                <td>${product.price}</td>
-                <td class="product-total">${subtotal.toFixed(2)}</td>
-                <td>
-                    <button class="btn btn-danger btn-sm remove-product" data-product="${product.name}">Eliminar</button>
-                </td>
-            `;
-
-            cartTable.appendChild(row);
-            totalPrice += subtotal;
-        });
-
-        // Mostrar el total
-        document.getElementById('totalPrice').innerText = `Total: $${totalPrice.toFixed(2)}`;
-
-        // Manejo de eliminación de productos
-        document.querySelectorAll('.remove-product').forEach(button => {
-            button.addEventListener('click', function () {
-                const productName = button.getAttribute('data-product');
-                removeProductFromCart(productName);
-            });
-        });
-
-        // Manejo de cambio de cantidad
-        document.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener('change', function () {
-                updateProductQuantity(input);
-            });
-        });
-    };
-
-    // Eliminar producto del carrito
-    function removeProductFromCart(productName) {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        cart = cart.filter(product => product.name !== productName);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        location.reload(); // Recargar la página para actualizar el carrito
-    }
-
-    // Actualizar cantidad del producto
-    function updateProductQuantity(input) {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const productName = input.getAttribute('data-product');
-        const newQuantity = parseInt(input.value, 10);
-        const product = cart.find(p => p.name === productName);
-        if (product) {
-            const productTotal = product.price * newQuantity;
-            input.closest('tr').querySelector('.product-total').innerText = productTotal.toFixed(2);
-            product.quantity = newQuantity; // Actualizar cantidad
-            localStorage.setItem('cart', JSON.stringify(cart));
-            recalculateTotal(); // Recalcular el total
+    $("#paymentMethod").on("change", function () {
+        const selectedMethod = $(this).val();
+        if (selectedMethod === "cash") {
+            $("#cashFields").removeClass("d-none");
+            $("#cardFields").addClass("d-none");
+        } else if (selectedMethod === "card") {
+            $("#cardFields").removeClass("d-none");
+            $("#cashFields").addClass("d-none");
+        } else {
+            $(".payment-fields").addClass("d-none");
         }
-    }
+    });
 
-    // Recalcular el total
-    function recalculateTotal() {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let totalPrice = 0;
-        cart.forEach(product => {
-            totalPrice += product.price * (product.quantity || 1);
+    $("#confirmPayment").on("click", function (e) {
+        e.preventDefault();
+        
+        const paymentMethod = $("#paymentMethod").val();
+        if (!paymentMethod) {
+            Swal.fire({
+                title: "Error",
+                text: "Seleccione un método de pago.",
+                icon: "error"
+            });
+            return;
+        }
+
+        let paymentDetails = {};
+        if (paymentMethod === "cash") {
+            const cashAmount = parseFloat($("#cashAmount").val());
+            if (isNaN(cashAmount) || cashAmount < parseFloat("{{total}}")) {
+                Swal.fire({
+                    title: "Error",
+                    text: "El monto ingresado no es válido o es menor al total.",
+                    icon: "error"
+                });
+                return;
+            }
+            paymentDetails = { method: "cash", amount: cashAmount };
+        } else if (paymentMethod === "card") {
+            const cardNumber = $("#cardNumber").val().trim();
+            const expiryDate = $("#expiryDate").val();
+            const cvv = $("#cvv").val().trim();
+
+            if (!cardNumber || cardNumber.length !== 16 || !expiryDate || !cvv || cvv.length !== 3) {
+                Swal.fire({
+                    title: "Error",
+                    text: "Por favor complete todos los campos de la tarjeta correctamente.",
+                    icon: "error"
+                });
+                return;
+            }
+            paymentDetails = { method: "card", cardNumber, expiryDate, cvv };
+        }
+
+        // Realizar la solicitud Ajax para finalizar la compra
+        $.ajax({
+            url: "/finalizar_compra",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(paymentDetails),
+            success: function (respuesta) {
+                if (respuesta.data === "success") {
+                    Swal.fire({
+                        title: "Compra Finalizada",
+                        text: "Tu compra ha sido procesada con éxito.",
+                        icon: "success"
+                    }).then(function () {
+                        window.location.href = "/";
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Ocurrió un problema al procesar tu compra.",
+                        icon: "error"
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    title: "Error",
+                    text: "No se pudo conectar al servidor. Inténtalo nuevamente.",
+                    icon: "error"
+                });
+            }
         });
-        document.getElementById('totalPrice').innerText = `Total: $${totalPrice.toFixed(2)}`;
-    }
+    });
 
-    // Llenar el modal de pago
-    document.querySelector('[data-bs-target="#paymentModal"]').addEventListener('click', function () {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const paymentDetails = document.getElementById('paymentDetails');
-        const paymentTotal = document.getElementById('paymentTotal');
+    function actualizarTotal() {
         let total = 0;
-
-        // Limpiar detalles previos
-        paymentDetails.innerHTML = '';
-
-        cart.forEach(product => {
-            const quantity = product.quantity || 1;
-            const subtotal = product.price * quantity;
-            const listItem = document.createElement('li');
-            listItem.textContent = `${product.name} - ${quantity} x $${product.price} = $${subtotal.toFixed(2)}`;
-            paymentDetails.appendChild(listItem);
-            total += subtotal;
+        $("#cartTable tbody tr").each(function () {
+            let precio = parseFloat($(this).find('td:nth-child(4)').text().replace('$', ''));
+            total += precio;
         });
 
-        paymentTotal.textContent = `Total: $${total.toFixed(2)}`;
-    });
-
-    // Confirmar Pago
-    document.getElementById('confirmPayment').addEventListener('click', function () {
-        alert('¡Compra realizada con éxito! Gracias por elegirnos.');
-        localStorage.removeItem('cart'); // Vaciar el carrito
-        location.reload(); // Recargar página para limpiar la interfaz
-    });
+        $("#totalPrice").text("Total: $" + total.toFixed(2));
+        $("#paymentTotal").text("Total: $" + total.toFixed(2));
+    }
 </script>
-
-
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
 {% endblock %}
-
-
