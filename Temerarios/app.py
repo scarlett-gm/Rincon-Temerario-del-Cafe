@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 # Configuración
-app.config['SQLALCHEMY_DATABASE_URI'] = r'sqlite:///C:\Users\LENOVO\Desktop\Rincon-Temerario-del-Cafe-4\Temerarios\backend\baseD.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = r'sqlite:///C:\Users\LENOVO\Desktop\Rincon-Temerario-del-Cafe-7\Temerarios\backend\baseD.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_COOKIE_SECURE'] = False  # Solo en desarrollo
 app.config['SESSION_COOKIE_HTTPONLY'] = True
