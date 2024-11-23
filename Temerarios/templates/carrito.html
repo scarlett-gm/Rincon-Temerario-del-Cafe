@@ -99,10 +99,37 @@ Carrito
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-                <ul id="paymentDetails">
-                    <!-- Detalles de la compra se llenarán dinámicamente -->
-                </ul>
                 <h3 id="paymentTotal">Total: ${{total}}</h3>
+                <form id="paymentForm">
+                    <div class="mb-3">
+                        <label for="paymentMethod" class="form-label">Método de Pago</label>
+                        <select id="paymentMethod" class="form-select" required>
+                            <option value="" selected disabled>Seleccione un método de pago</option>
+                            <option value="cash">Efectivo</option>
+                            <option value="card">Tarjeta</option>
+                        </select>
+                    </div>
+                    <div id="cashFields" class="payment-fields d-none">
+                        <div class="mb-3">
+                            <label for="cashAmount" class="form-label">Monto a Pagar</label>
+                            <input type="number" class="form-control" id="cashAmount" placeholder="Ingrese el monto en efectivo" min="0" step="0.01">
+                        </div>
+                    </div>
+                    <div id="cardFields" class="payment-fields d-none">
+                        <div class="mb-3">
+                            <label for="cardNumber" class="form-label">Número de Tarjeta</label>
+                            <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="16">
+                        </div>
+                        <div class="mb-3">
+                            <label for="expiryDate" class="form-label">Fecha de Expiración</label>
+                            <input type="month" class="form-control" id="expiryDate">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" class="form-control" id="cvv" placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -110,6 +137,8 @@ Carrito
             </div>
         </div>
     </div>
+</div>
+
 </div>
 <script>
     $(".delete-btn").on("click", function (e) {
@@ -142,13 +171,66 @@ Carrito
         })
     });
 
+    $("#paymentMethod").on("change", function () {
+        const selectedMethod = $(this).val();
+        if (selectedMethod === "cash") {
+            $("#cashFields").removeClass("d-none");
+            $("#cardFields").addClass("d-none");
+        } else if (selectedMethod === "card") {
+            $("#cardFields").removeClass("d-none");
+            $("#cashFields").addClass("d-none");
+        } else {
+            $(".payment-fields").addClass("d-none");
+        }
+    });
+
     $("#confirmPayment").on("click", function (e) {
         e.preventDefault();
         
+        const paymentMethod = $("#paymentMethod").val();
+        if (!paymentMethod) {
+            Swal.fire({
+                title: "Error",
+                text: "Seleccione un método de pago.",
+                icon: "error"
+            });
+            return;
+        }
+
+        let paymentDetails = {};
+        if (paymentMethod === "cash") {
+            const cashAmount = parseFloat($("#cashAmount").val());
+            if (isNaN(cashAmount) || cashAmount < parseFloat("{{total}}")) {
+                Swal.fire({
+                    title: "Error",
+                    text: "El monto ingresado no es válido o es menor al total.",
+                    icon: "error"
+                });
+                return;
+            }
+            paymentDetails = { method: "cash", amount: cashAmount };
+        } else if (paymentMethod === "card") {
+            const cardNumber = $("#cardNumber").val().trim();
+            const expiryDate = $("#expiryDate").val();
+            const cvv = $("#cvv").val().trim();
+
+            if (!cardNumber || cardNumber.length !== 16 || !expiryDate || !cvv || cvv.length !== 3) {
+                Swal.fire({
+                    title: "Error",
+                    text: "Por favor complete todos los campos de la tarjeta correctamente.",
+                    icon: "error"
+                });
+                return;
+            }
+            paymentDetails = { method: "card", cardNumber, expiryDate, cvv };
+        }
+
         // Realizar la solicitud Ajax para finalizar la compra
         $.ajax({
             url: "/finalizar_compra",
             method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(paymentDetails),
             success: function (respuesta) {
                 if (respuesta.data === "success") {
                     Swal.fire({
@@ -156,7 +238,6 @@ Carrito
                         text: "Tu compra ha sido procesada con éxito.",
                         icon: "success"
                     }).then(function () {
-                        // Redirigir a una página de confirmación o al inicio
                         window.location.href = "/";
                     });
                 } else {
